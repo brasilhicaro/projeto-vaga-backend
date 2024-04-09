@@ -1,0 +1,6 @@
+.gitignore
+dockerfile
+docker-compose.yaml
+initDataBase.sh
+initDockerProject.sh
+README.md
