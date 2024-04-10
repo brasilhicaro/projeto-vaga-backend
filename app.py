@@ -1,18 +1,7 @@
-from flask import Flask
-""" This is a simple Flask application
-that returns a string when the root URL
-is accessed."""
+from flask import app, Flask, request
+from src.presentation.controllers.employeer_controller import routes as employeer_routes
 
-def create_app():
-    """ Create a Flask application."""
-    app = Flask(__name__)
 
-    @app.route('/')
-    def index():
-        return 'Hello, World!'
-
-    return app
-
-if __name__ == '__main__':
-    app = create_app()
-    app.run()
+app = Flask(__name__)
+if __name__ == "__main__":
+    app.run(debug=True)

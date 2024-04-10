@@ -16,4 +16,3 @@ class Departament(Base):
     """
     def __repr__(self) -> str:
         return f'Departament id: {self.id}, name: {self.name}'
-    
