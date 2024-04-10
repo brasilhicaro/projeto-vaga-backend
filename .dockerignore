@@ -4,3 +4,6 @@ docker-compose.yaml
 initDataBase.sh
 initDockerProject.sh
 README.md
+.venv
+.pytest_cache/*
+__pycache__/*
