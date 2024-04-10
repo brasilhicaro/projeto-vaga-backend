@@ -1,14 +1,14 @@
-from src.model.repository.employeer_repository import EmployeerRepository
 from src.model.entity.employeer import Employeer
 from src.infra.db.settings.connection import Connection
 
-class DepartamentRepositoryImpl(EmployeerRepository):
-    """
-    Class responsible
-    for implementing the
-    departament repository
-    interface
-    """
+
+"""
+Class responsible
+for implementing the
+employeer repository
+interface
+"""
+class EmployeerRepository:
 
     def insert_employeer(self, employeer: Employeer) -> Employeer:
         """

@@ -1,7 +1,6 @@
 from src.model.entity.employeer import Employeer
-from src.model.repository.employeer_repository import EmployeerRepository
 from src.infra.db.settings.connection import Connection
-from src.model.repository.impl.employeer_repository_impl import EmployeerRepositoryImpl
+from src.model.repository.employeer_repository_impl import EmployeerRepository
 from src.business.dto.employeer_request_DTO import EmployeerRequestDTO
 from src.business.dto.employeer_response_DTO import EmployeerResponseDTO
 
@@ -16,10 +15,9 @@ class EmployeerService:
     creating a employeer
     """
     
-    __repository: EmployeerRepository
 
     def __init__(self):
-        self.__repository = EmployeerRepositoryImpl()
+        self.__repository = EmployeerRepository()
     @classmethod
     def create_employeer(self, employeer_request: EmployeerRequestDTO) -> EmployeerResponseDTO:
         try:

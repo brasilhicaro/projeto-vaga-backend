@@ -1,11 +1,11 @@
 from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import declarative_base
 from uuid import uuid4
-from src.infra.db.settings import Base
 
 """
 Class responsible for mapping the departament entity
 """
-class Departament(Base):
+class Departament(declarative_base()):
     __tablename__ = 'tb_departament'
 
     id = Column(String, primary_key=True, default=str(uuid4()))

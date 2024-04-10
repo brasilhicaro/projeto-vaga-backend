@@ -10,5 +10,7 @@ class DepartamentResponseDTO:
     initializing the class
     """
     def __init__(self, id: str, name: str):
-        self.id = id
-        self.name = name
+        self.data ={
+            "id" : id,
+            "name" : name
+        }

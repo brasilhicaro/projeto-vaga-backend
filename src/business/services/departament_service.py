@@ -1,6 +1,5 @@
 from src.model.entity.departament import Departament
-from src.model.repository.departament_repository import DepartamentRepository
-from src.model.repository.impl.departament_repository_impl import DepartamentRepositoryImpl
+from src.model.repository.departament_repository_impl import DepartamentRepository
 from src.infra.db.settings.connection import Connection
 from src.business.dto.departament_request_DTO import DepartamentRequestDTO
 from src.business.dto.departament_response_DTO import DepartamentResponseDTO
@@ -15,11 +14,10 @@ class DepartamentService:
     Method responsible for
     creating a departament
     """
-    
     __repository: DepartamentRepository
-
+    
     def __init__(self):
-        self.__repository = DepartamentRepositoryImpl()
+        self.__repository = DepartamentRepository()
     
     def create_departament(self, departament_request: DepartamentRequestDTO) -> DepartamentResponseDTO:
         with Connection() as conn:
@@ -35,28 +33,23 @@ class DepartamentService:
                 raise
             finally:
                 conn.session.close()
-    def list_departaments(self) -> list:
-        with Connection() as conn:
-            try:
-                departaments = self.__repository.list_departaments()
-                return [DepartamentResponseDTO(id=departament.id, name=departament.name) for departament in departaments]
-            except:
-                conn.session.rollback()
-                raise
-            finally:
-                conn.session.close()
+
+    def list_departaments(self) -> dict:
+        try:
+            print("List departaments service")
+            departaments = self.__repository.select_all_departament()
+            print("retornando departaments")
+            return {DepartamentResponseDTO(id= departament.id, name=departament.name ) for departament in departaments}
+        except Exception as e:
+            raise 
 
     def get_departament(self, id: str) -> DepartamentResponseDTO:
-        with Connection() as conn:
-            try:
-                departament = self.__repository.get_departament(id)
-                return DepartamentResponseDTO(id=departament.id, name=departament.name)
-            except:
-                conn.session.rollback()
-                raise
-            finally:
-                conn.session.close()
-
+        try:
+            departament = self.__repository.get_departament(id)
+            return DepartamentResponseDTO(id=departament.id, name=departament.name)
+        except:
+            raise Exception("Departament not found")
+        
     def update_departament(self, id: str, departament_request: DepartamentRequestDTO) -> DepartamentResponseDTO:
         with Connection() as conn:
             try:
