@@ -1,28 +1,28 @@
 import pymysql.cursors
-
+from os import getenv
 
 def get_connection():
     """Retorna a conexão com o DB
     """
 
     return pymysql.connect(
-        host='db_test',
-        user='loren',
-        password='loren',
-        database='projeto_vaga_backend',
+        host= getenv('HOST'),
+        user= getenv('USER'),
+        password= getenv('PASSWORD'),
+        database=getenv('DATABASE'),
         charset='utf8mb4',
         cursorclass=pymysql.cursors.DictCursor,
         )
     
-def populate_db(connection, table_name:str, data:dict) -> None:
+    
+def populate_db(connection, sql_function:str) -> None:
     with connection:
         with connection.cursor() as cursor:
             # Create a new record
-            sql = f"INSERT INTO `{table_name}` (`{"`,`".join(data.keys())}`) VALUES ({"%s,"*len(data)})"
-            cursor.execute(sql, (data.values()))
+            cursor.execute(sql_function)
         connection.commit()
 
-def read_raw_from_db(connection, table_name:str, data:tuple, target:tuple) -> dict:
+def read_raw_from_db(connection:object, sql_function:str) -> dict:
     """_summary_
 
     Args:
@@ -35,8 +35,8 @@ def read_raw_from_db(connection, table_name:str, data:tuple, target:tuple) -> di
         dict: _description_
     """
     with connection.cursor() as cursor:
-        sql = f"SELECT `{'`,`'.join(data)}` FROM `{table_name}` WHERE `{target[0]}`=%s"
-        cursor.execute(sql, (f'{target[1]}',))
+        sql = sql_function
+        cursor.execute(sql)
         result = cursor.fetchone()
         return result
     

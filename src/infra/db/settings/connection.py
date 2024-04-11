@@ -1,6 +1,7 @@
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from os import getenv
 
 
 class Connection:
@@ -18,7 +19,7 @@ class Connection:
 
     def __init__(self) -> None:
         self.__connection_string = (
-            "mysql+pymysql://loren:loren@localhost:3306/projeto_vaga_backend"
+            f"mysql+pymysql://loren:loren@localhost:{getenv('PORT')}/{getenv('DATABASE')}"
         )
         self.__engine = self.__connect()
         self.Session = sessionmaker(bind=self.__engine)
