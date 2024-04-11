@@ -5,25 +5,23 @@ services:
 
   db:
     image: mysql:5.7
+    container_name: db_test
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: loren
       MYSQL_DATABASE: projeto_vaga_backend
       MYSQL_USER: loren
-      MYSQL_PASSWORD: loren
+      MYSQL_PASSWORD: loren # PÔR ENVS
     ports:
       - "3306:3306"
     volumes:
-      - ./src/utils/schema.sql:/docker-entrypoint-initdb.d/schema.sql
-    
+      - ./src/infra/db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
 
-  web:
-    image: phpmyadmin/phpmyadmin
-    restart: always
-    environment:
-      PMA_HOST: db
-      PMA_PORT: 3306
-    ports:
-      - "8090:80"
-    depends_on:
-      - db
+  api:
+    restart: 'always'
+    build: 
+      context: .
+      dockerfile: ./Dockerfile
+    entrypoint: ./entrypoint.sh
+    expose:
+      - 8000
