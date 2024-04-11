@@ -1,50 +1,55 @@
-from src.model.entity.departament import Departament
+from src.model.entity.department import Department
 from sqlalchemy.exc import SQLAlchemyError
 from src.infra.db.settings.connection import Connection
 
-class DepartamentRepository():
+
+class DepartmentRepository:
     """
     Class responsible
     for implementing the
-    departament repository
+    department repository
     interface
     """
 
-    def insert_departament(self, departament: Departament) -> Departament:
+    def insert_department(self, department: Department) -> Department:
         """
-        Method responsible for inserting a departament in the database
+        Method responsible for inserting a department in the database
         """
         with Connection() as conn:
             try:
-                conn.session.add(departament)
+                conn.session.add(department)
                 conn.session.commit()
-                return departament
+                return department
             except:
                 conn.session.rollback()
                 raise
             finally:
                 conn.session.close()
 
-    def select_departament(self, departament_id: str) -> Departament:
+    def select_department(self, department_id: str) -> Department:
         """
-        Method responsible for returning a departament from the database
+        Method responsible for returning a department from the database
         """
         with Connection() as conn:
             try:
-                return conn.session.query(Departament).filter(Departament.id == departament_id).first()
+                return (
+                    conn.session.query(Department)
+                    .filter(Department.id == department_id)
+                    .first()
+                )
             except:
                 conn.session.rollback()
                 raise
             finally:
                 conn.session.close()
 
-    def select_all_departament(self) -> list:
+    def select_all_department(self) -> list:
         """
-        Method responsible for returning all departament from the database
+        Method responsible for returning all department from the database
         """
         with Connection() as conn:
             try:
-                return conn.session.query(Departament).all()
+                return conn.session.query(Department).all()
             except SQLAlchemyError as e:
                 conn.session.rollback()
                 print("An error occurred while querying departments:", e)
@@ -52,28 +57,30 @@ class DepartamentRepository():
             finally:
                 conn.session.close()
 
-    def update_departament(self, departament: Departament) -> Departament:
+    def update_department(self, department: Department) -> Department:
         """
-        Method responsible for updating a departament in the database
+        Method responsible for updating a department in the database
         """
         with Connection() as conn:
             try:
-                conn.session.merge(departament)
+                conn.session.merge(department)
                 conn.session.commit()
-                return departament
+                return department
             except:
                 conn.session.rollback()
                 raise
             finally:
                 conn.session.close()
 
-    def delete_departament(self, departament_id: str) -> None:
+    def delete_department(self, department_id: str) -> None:
         """
-        Method responsible for deleting a departament from the database
+        Method responsible for deleting a department from the database
         """
         with Connection() as conn:
             try:
-                conn.session.query(Departament).filter(Departament.id == departament_id).delete()
+                conn.session.query(Department).filter(
+                    Department.id == department_id
+                ).delete()
                 conn.session.commit()
             except:
                 conn.session.rollback()

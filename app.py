@@ -1,15 +1,26 @@
-from flask import Flask
-from src.presentation.controllers.departament_controller import departament_controller
-from src.presentation.controllers.employeer_controller import employeer_controller
+from fastapi import FastAPI
 
-app = Flask(__name__)
+from src.presentation.controllers import department, employee
 
-app.register_blueprint(departament_controller)
-app.register_blueprint(employeer_controller)
 
-@app.route("/")
-def index():
-    return "Bem-vindo à API!"
+def create_application() -> FastAPI:
+    application = FastAPI(
+        title="Projeto do Hicaro",
+        summary="Projeto para vaga de backend",
+        contact={
+            "name": "Hicaro Brasil",
+            "email": "hicaro.brasil@hotmail.com",
+            "url": "https://github.com/brasilhicaro",
+        },
+    )
+    application.include_router(department.router, prefix="/department")
+    application.include_router(employee.router, prefix="/employee")
+    return application
 
-if __name__ == "__main__":
-    app.run(debug=True)
+
+app = create_application()
+
+
+@app.get("/")
+async def root():
+    return {"message": "Projeto do Hicaro"}

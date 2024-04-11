@@ -1,78 +1,83 @@
-from src.model.entity.employeer import Employeer
+from src.model.entity.employee import Employee
 from src.infra.db.settings.connection import Connection
-
 
 """
 Class responsible
 for implementing the
-employeer repository
+employee repository
 interface
 """
-class EmployeerRepository:
 
-    def insert_employeer(self, employeer: Employeer) -> Employeer:
+
+class EmployeeRepository:
+
+    def insert_employee(self, employee: Employee) -> Employee:
         """
-        Method responsible for inserting a employeer in the database
+        Method responsible for inserting a employee in the database
         """
         with Connection() as conn:
             try:
-                conn.session.add(employeer)
+                conn.session.add(employee)
                 conn.session.commit()
-                return employeer
+                return employee
             except:
                 conn.session.rollback()
                 raise
             finally:
                 conn.session.close()
 
-    def select_employeer(self, employeer_id: str) -> Employeer:
+    def select_employee(self, employee_id: str) -> Employee:
         """
-        Method responsible for returning a employeer from the database
+        Method responsible for returning a employee from the database
         """
         with Connection() as conn:
             try:
-                return conn.session.query(Employeer).filter(Employeer.id == employeer_id).first()
+                return (
+                    conn.session.query(Employee)
+                    .filter(Employee.id == employee_id)
+                    .first()
+                )
             except:
                 conn.session.rollback()
                 raise
             finally:
                 conn.session.close()
 
-    def select_all_employeers(self) -> list:
+    def select_all_employees(self) -> list:
         """
-        Method responsible for returning all employeers from the database
+        Method responsible for returning all employees from the database
         """
         with Connection() as conn:
             try:
-                return conn.session.query(Employeer).all()
+                return conn.session.query(Employee).all()
             except:
                 conn.session.rollback()
                 raise
             finally:
                 conn.session.close()
 
-    def update_employeer(self, employeer: Employeer) -> Employeer:
+    def update_employee(self, employee: Employee) -> Employee:
         """
-        Method responsible for updating a employeer in the database
+        Method responsible for updating a employee in the database
         """
         with Connection() as conn:
             try:
-                conn.session.merge(employeer)
+                conn.session.merge(employee)
                 conn.session.commit()
-                return employeer
+                return employee
             except:
                 conn.session.rollback()
                 raise
             finally:
                 conn.session.close()
 
-    def delete_employeer(self, employeer_id: str) -> None:
+    def delete_employee(self, employee_id: str) -> None:
         """
-        Method responsible for deleting a employeer from the database
+        Method responsible for deleting a employee from the database
         """
         with Connection() as conn:
             try:
-                conn.session.query(Employeer).filter(Employeer.id == employeer_id).delete()
+                conn.session.query(Employee).filter(Employee.id == employee_id).delete()
                 conn.session.commit()
             except:
                 conn.session.rollback()
