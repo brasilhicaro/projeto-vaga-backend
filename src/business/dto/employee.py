@@ -1,6 +1,4 @@
 from pydantic import BaseModel
-from typing import List
-
 
 
 class Employee(BaseModel):
@@ -9,9 +7,9 @@ class Employee(BaseModel):
     dependents: int
 
 
-class EmployeeResponse(Employee):
-    id: str
+class EmployeeResponse(BaseModel):
+    name: str
     have_dependents: bool
 
     class Config:
-        orm_mode = True
+        from_attributes = True

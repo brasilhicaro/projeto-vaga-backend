@@ -57,33 +57,3 @@ class DepartmentRepository:
             finally:
                 conn.session.close()
 
-    def update_department(self, department: Department) -> Department:
-        """
-        Method responsible for updating a department in the database
-        """
-        with Connection() as conn:
-            try:
-                conn.session.merge(department)
-                conn.session.commit()
-                return department
-            except:
-                conn.session.rollback()
-                raise
-            finally:
-                conn.session.close()
-
-    def delete_department(self, department_id: str) -> None:
-        """
-        Method responsible for deleting a department from the database
-        """
-        with Connection() as conn:
-            try:
-                conn.session.query(Department).filter(
-                    Department.id == department_id
-                ).delete()
-                conn.session.commit()
-            except:
-                conn.session.rollback()
-                raise
-            finally:
-                conn.session.close()

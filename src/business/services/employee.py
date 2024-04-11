@@ -1,5 +1,4 @@
 from src.model.entity.employee import Employee
-from src.infra.db.settings.connection import Connection
 from src.model.repository.employee import EmployeeRepository
 from src.business.dto.employee import Employee, EmployeeResponse
 
@@ -19,41 +18,36 @@ class EmployeeService:
     def __init__(self):
         self.__repository = EmployeeRepository()
 
-    @classmethod
     def create_employee(self, employee_request: Employee) -> EmployeeResponse:
         try:
-            employee = Employee(
+            employeer = Employee(
                 name=employee_request.name,
                 department_id=employee_request.department_id,
                 have_dependents=employee_request.dependents,
             )
             if not self.validate_employee(employee_request):
                 raise Exception("Invalid employee name")
-            employee = self.__repository.create(employee)
+            employee = self.__repository.insert_employee(employeer)
 
             return EmployeeResponse(
-                id=employee.id,
                 name=employee.name,
-                department_id=employee.department_id,
                 have_dependents=self.validate_dependents(employee),
             )
         except Exception as e:
-            raise Exception(e.message)
+            raise Exception(e)
 
     def list_employees(self) -> list:
         try:
-            employees = self.__repository.list_employees()
+            employees = self.__repository.select_all_employees()
             return [
                 EmployeeResponse(
-                    id=employee.id,
                     name=employee.name,
-                    department_id=employee.department_id,
                     have_dependents=self.validate_dependents(employee),
                 )
                 for employee in employees
             ]
         except Exception as e:
-            raise Exception(e.message)
+            raise Exception(e)
 
     def validate_employee(self, employee: Employee) -> bool:
         name_split = employee.name.split(" ")
@@ -69,7 +63,7 @@ class EmployeeService:
 
     def get_employee(self, id: str) -> EmployeeResponse:
         try:
-            employee = self.__repository.get_employee(id)
+            employee = self.__repository.select_employee(id)
             return EmployeeResponse(
                 id=employee.id,
                 name=employee.name,
@@ -79,30 +73,6 @@ class EmployeeService:
         except Exception as e:
             raise Exception("e.message")
 
-    def delete_employee(self, id: str) -> bool:
-        try:
-            return self.__repository.delete_employee(id)
-        except Exception as e:
-            raise Exception(e.message)
-
-    def update_employee(self, id: str, employee_request: Employee) -> EmployeeResponse:
-        try:
-            employee = Employee(
-                name=employee_request.name,
-                department_id=employee_request.department_id,
-                have_dependents=employee_request.dependents,
-            )
-            if not self.validate_employee(employee_request):
-                raise Exception("Invalid employee name")
-            employee = self.__repository.update_employee(id, employee)
-            return EmployeeResponse(
-                id=employee.id,
-                name=employee.name,
-                department_id=employee.department_id,
-                have_dependents=self.validate_dependents(employee),
-            )
-        except Exception as e:
-            raise Exception(e.message)
 
     def validate_dependents(self, employee: Employee) -> bool:
         if employee.dependents>0:
