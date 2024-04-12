@@ -13,12 +13,13 @@ e por fim Infra (que guarda objetos que têm como objetivo configurar nosso sist
 #### FastAPI: O uso do FastAPI dá-se por sua praticidade e a implementação nativa de um Swagger.
 #### PostgreSQL: O SGBD mais utilizado (portanto há mais conteúdo) e provém uma segurança e velocidade que é algo que almejo sempre que penso em algum Banco de dados.
 #### Docker: O uso do Docker foi utilizado para garantir que independente do SO, a API sempre irá rodar o mesmo serviço sem riscos de conflito entre versões de ferramentas.
-#### ShellScript: Para a execução da API diretamente pela inicialização do Docker-Compose.
+#### ShellScript: Para a execução do Banco de Dados diretamente pela inicialização do Docker-Compose.
 
 ## 1. Primeiros passos
 ### Configuração e Inicialização:
  * Para utilizar o programa será necessário ter na máquina o [Docker](https://www.docker.com/), todo o processo de configuração do Docker poderá ser encontrado no site oficial.
   * Com o Docker instalado e configurado, execute o seguinte comando: ``docker-compose up -d``.
+  * Para executar a API rode o seguinte comando no terminal ``uvicorn app:app --host 0.0.0.0 --port 8000 --workers 2 ``
 
 ## 2. Rotas
 ### O projeto possui as seguintes rotas:
