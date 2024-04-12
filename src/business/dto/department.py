@@ -5,11 +5,11 @@ Department DTO
 """
 
 
-class Department(BaseModel):
+class DepartmentRequest(BaseModel):
     name: str
 
 
-class DepartmentResponse(Department):
+class DepartmentResponse(DepartmentRequest):
 
     class Config:
         from_attributes = True

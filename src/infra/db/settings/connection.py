@@ -1,47 +1,46 @@
-
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, URL
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.exc import SQLAlchemyError
+from src.model.entity.Models import Base
+from dotenv import load_dotenv
+
 from os import getenv
 
-
+load_dotenv()
 class Connection:
     """
-    Responsible Class for creating a connection with the database
+    Class responsible for creating the connection with the postgres database
     """
-
-    Session: object
-    __connection_string: str
+    __session: sessionmaker
     __engine: create_engine
-
-    """
-    Initializes the connection string and the engine
-    """
-
+    __cursor: create_engine
+    
     def __init__(self) -> None:
-        self.__connection_string = (
-            f"mysql+pymysql://loren:loren@localhost:{getenv('PORT')}/{getenv('DATABASE')}"
-        )
-        self.__engine = self.__connect()
-        self.Session = sessionmaker(bind=self.__engine)
-
-    """
-    Create a connection with the database
-    """
-
-    def __connect(self) -> create_engine:
-        return create_engine(self.__connection_string)
-
-    """
-    To get the connection with the database
-    """
-
-    def get_session(self) -> object:
-        return self.Session()
-
-    def __enter__(self):
-        self.session = self.get_session()
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        if self.session:
-            self.session.close()
+        """
+        _summary_:
+            Method responsible for initializing the connection object
+        """
+        
+        try:
+            self.__engine = create_engine(URL.create(
+                getenv('POSTGRES_ENGINE'),
+                username=getenv('POSTGRES_USER'),
+                password=getenv('POSTGRES_PASSWORD'),
+                host=getenv('POSTGRES_HOST', 'localhost'),
+                port=getenv('POSTGRES_PORT'),
+                database=getenv('POSTGRES_DB',)
+            ))
+            self.__cursor = self.__engine.connect()
+            Base.metadata.create_all(bind=self.__engine)
+            self.__session = sessionmaker(bind=self.__engine)
+        except SQLAlchemyError as err:
+            print(e)
+            
+    def get_session(self) -> sessionmaker:
+        """
+        _summary_:
+            Method responsible for returning the session object
+        
+        returns: _description_: Session object
+        """
+        return self.__session()

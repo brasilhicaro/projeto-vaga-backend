@@ -1,27 +1,28 @@
-# Use root/example as user/password credentials
-version: '3.1'
+version: '3.8'
 
 services:
 
-  db:
-    image: mysql:5.7
-    container_name: db_test
+  postgres:
+    image: postgres:16
     restart: always
+    container_name: db_test
     environment:
-      MYSQL_ROOT_PASSWORD: loren
-      MYSQL_DATABASE: projeto_vaga_backend
-      MYSQL_USER: loren
-      MYSQL_PASSWORD: loren # PÔR ENVS
+      POSTGRES_PASSWORD: loren
+      POSTGRES_DB: projeto_vaga_backend
+      POSTGRES_USER: loren
     ports:
-      - "3306:3306"
-    volumes:
-      - ./src/infra/db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+      - "5432:5432"
 
-  api:
-    restart: 'always'
-    build: 
-      context: .
-      dockerfile: ./Dockerfile
-    entrypoint: ./entrypoint.sh
-    expose:
-      - 8000
+
+  # api:
+  #   restart: 'always'
+  #   build: 
+  #     context: .
+  #     dockerfile: ./Dockerfile
+  #   entrypoint: ./entrypoint.sh
+  #   volumes:
+  #     - ./src:/app/src:Z
+  #   env_file:
+  #     - .env.example
+  #   ports:
+  #     - "8000:8000"

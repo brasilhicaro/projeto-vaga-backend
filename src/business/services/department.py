@@ -1,7 +1,6 @@
-from src.model.entity.department import Department
+from src.model.entity.Models import Department
 from src.model.repository.department import DepartmentRepository
-from src.infra.db.settings.connection import Connection
-from src.business.dto.department import Department, DepartmentResponse
+from src.business.dto.department import DepartmentRequest, DepartmentResponse
 
 """
 Class responsible
@@ -21,22 +20,11 @@ class DepartmentService:
     def __init__(self):
         self.__repository = DepartmentRepository()
 
-    def create_department(self, department_request: Department) -> DepartmentResponse:
-        try:
-            department: Department = Department(name=department_request.name)
-            if not self.validate_department(department_request):
-                raise Exception("Invalid department name")
-            department = self.__repository.insert_department(department)
-
-            return DepartmentResponse(id=department.id, name=department.name)
-        except Exception as e:
-                raise
-
     def list_departments(self) -> dict:
         try:
-            print("List departments service")
             departments = self.__repository.select_all_department()
-            print("retornando departments")
+            if len(departments) == 0:
+                return {}
             return {
                 DepartmentResponse(name=department.name)
                 for department in departments
@@ -54,3 +42,10 @@ class DepartmentService:
         ):
             return False
         return True
+    
+    def find_ID_by_name(self, department_name: str) -> str :
+        try:
+            department = self.__repository.find_ID_by_name(department_name)
+            return department.id
+        except Exception as e:
+            raise

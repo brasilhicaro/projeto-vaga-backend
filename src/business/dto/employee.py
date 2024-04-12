@@ -1,7 +1,8 @@
+
 from pydantic import BaseModel
 
 
-class Employee(BaseModel):
+class EmployeeRequest(BaseModel):
     name: str
     department_id: str
     dependents: int

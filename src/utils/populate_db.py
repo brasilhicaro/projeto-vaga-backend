@@ -1,9 +1,8 @@
 import faker
 import random
-from uuid import uuid4
 import faker.providers
-from src.utils.connection_db import get_connection, populate_db, read_raw_from_db
 
+from src.business.services.department import DepartmentService
 
 DEPARTMENTS = [
     "Tecnologia e Inovação",
@@ -14,29 +13,34 @@ DEPARTMENTS = [
 ]
 
 faker = faker.Faker()
-connection = get_connection()
 
 
 def create_fake_departments() -> dict:
+    department_service = DepartmentService()
     for department in DEPARTMENTS:
-        sql: str = f"INSERT INTO tb_departament (id, name) VALUES ('{str(uuid4())}','{department}')"
-        populate_db(connection, sql)
-
+        department_service.create_department(department)
 def create_fake_employeer() -> dict:
     for _ in range(10):
-        sql:str = f"INSERT INTO tb_employee (id, name, department_id, dependents) VALUES ('{str(uuid4())}', '{faker.name()}',\
-            '{get_department_id_by_name(random.choice(DEPARTMENTS))}', {random.randint(0, 5)})"
-        populate_db(connection,sql)
-    
+        name = faker.name()
+        department_id = get_department_id_by_name(random.choice(DEPARTMENTS))
+        dependents = random.randint(0, 5)
+        employee = {
+            "name": name,
+            "department_id": get_department_id_by_name(department_id),
+            "dependents": dependents
+        }
+        populate_db(connection, "tb_employee", employee)
+        
+        
+        
+
 def get_department_id_by_name(name:str) -> str:
-    result = read_raw_from_db(connection, f"SELECT id FROM tb_departament WHERE name = '{name}'")
-    return result.get('id')
+    departament_service=DepartmentService()
+    departament=departament_service.find_ID_by_name(name)
+    return departament.id
+
 
 # python populate_db.py
 if __name__ == "__main__":
     create_fake_departments()
     create_fake_employeer()
-
-
-# Argparse https://realpython.com/command-line-interfaces-python-argparse/#fine-tuning-your-command-line-arguments-and-options
-# python app.py ......

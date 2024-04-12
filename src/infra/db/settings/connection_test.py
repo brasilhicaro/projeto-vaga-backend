@@ -1,11 +1,11 @@
 import pytest
-from .connection import  Connection
+from src.infra.db.settings.connection import Connection
 
 
 """
 This test is skipped because it is necessary to have a database to run it.
 """
-@pytest.mark.skip(reason="Sensitive test, it's necessary a database to run this test")
+@pytest.mark.skip("This test is skipped because it is necessary to have a database to run it.")
 def test_connection():
       """
       Test if the connection is not None,
