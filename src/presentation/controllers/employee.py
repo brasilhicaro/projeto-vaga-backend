@@ -16,19 +16,17 @@ async def get_employees():
         
         if not employees_list:
             return []
+        employer_list=[employee.dict() for employee in employees_list]
         
-        return {"employees": [employee.dict() for employee in employees_list]}
+        return employer_list
     except Exception as e:
         raise HTTPException(status_code=404, detail=e)
 
 
-@router.post("/", response_model=EmployeeResponse, status_code=201)
+@router.post("/", status_code=201)
 async def create_employee(employee: EmployeeRequest):
     try:
         employee_service = EmployeeService()
-        employer_response = employee_service.create_employee(employee)
-        if employer_response == None:
-            raise HTTPException(status_code=400, detail="Invalid employee")
-        return employer_response.dict()
+        employee_service.create_employee(employee)
     except Exception as e:
         raise HTTPException(status_code=400, detail=e)

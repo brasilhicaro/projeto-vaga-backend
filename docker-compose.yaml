@@ -12,17 +12,3 @@ services:
       POSTGRES_USER: loren
     ports:
       - "5432:5432"
-
-
-  # api:
-  #   restart: 'always'
-  #   build: 
-  #     context: .
-  #     dockerfile: ./Dockerfile
-  #   entrypoint: ./entrypoint.sh
-  #   volumes:
-  #     - ./src:/app/src:Z
-  #   env_file:
-  #     - .env.example
-  #   ports:
-  #     - "8000:8000"

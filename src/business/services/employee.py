@@ -52,12 +52,6 @@ class EmployeeService:
                 department_id = DepartmentService().find_ID_by_name(employee.department_name)
                 employee_entity = Employee(employee.name, department_id, employee.dependents)
                 self.__repository.insert_employee(employee_entity)
-                return EmployeeResponse(
-                    name=employee.name,
-                    have_dependents=self.validate_dependents(employee_entity)
-                )
-            print("Invalid employee")
-            return None
         except Exception as e:
             raise
     
@@ -87,7 +81,6 @@ class EmployeeService:
         if (
             name == ""
             or name == None
-            or (name.isnumeric())
             or (len(name) > 100 or len(name) < 3)
             or name.islower()
         ):
@@ -95,7 +88,6 @@ class EmployeeService:
         department_name = employee.department_name
         if (department_name == ""
             or department_name == None
-            or department_name.isnum()
             ):
                 return False 
         dependents =employee.dependents

@@ -87,7 +87,7 @@ class DepartmentService:
             return department
         except Exception as e:
             raise
-    def get_department(self, department_id: str) -> Department:
+    def get_department(self, department_id: int) -> Department:
         """_summary_: Get department by ID
 
         Args:

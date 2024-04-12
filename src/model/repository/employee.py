@@ -48,7 +48,8 @@ class EmployeeRepository:
             session.close()
 
         return employee
-    def select_employee(self, employee_id: str) -> Employee:
+    
+    def select_employee(self, employee_id: int) -> Employee:
         """_summary_: Method responsible for returning a employee from the database
 
         Args:

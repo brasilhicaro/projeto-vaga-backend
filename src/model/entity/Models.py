@@ -5,8 +5,6 @@ from sqlalchemy.ext.declarative import declarative_base
 
 
 
-def generate_uuid()->str:
-    return str(uuid4())
 
 Base = declarative_base()
 
@@ -15,7 +13,7 @@ class Department(Base):
     Class responsible for representing the department entity
     """
     __tablename__ = "tb_department"
-    id = Column(String, primary_key=True, default=generate_uuid)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, nullable=False)
 
     def __init__(self, name: str) -> None:
@@ -44,13 +42,13 @@ class Employee(Base):
 
     __tablename__ = "tb_employee"
     
-    id = Column(String, primary_key=True, default=generate_uuid)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, nullable=False)
-    department_id = Column(String, ForeignKey("tb_department.id"), nullable=False)
+    department_id = Column(Integer, ForeignKey("tb_department.id"), nullable=False)
     dependents = Column(Integer, nullable=False, default=0)
 
 
-    def __init__(self, name: str, department_id: str, dependents: int) -> None:
+    def __init__(self, name: str, department_id: int, dependents: int) -> None:
         """
         _summary_
 

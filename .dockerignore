@@ -1,8 +1,7 @@
 .gitignore
-dockerfile
+Dockerfile
 docker-compose.yaml
-initDataBase.sh
-initDockerProject.sh
+documentation.md
 README.md
 .venv
 .pytest_cache/*
