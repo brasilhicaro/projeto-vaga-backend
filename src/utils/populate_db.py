@@ -1,46 +1,56 @@
+from src.model.entity.Models import Department, Employee
+from src.utils.connection_db import connection
 import faker
 import random
-import faker.providers
 
-from src.business.services.department import DepartmentService
+class FakeDataService:
+    def __init__(self):
+        self.__DEPARTMENTS: list = [
+            "Tecnologia e Inovação",
+            "Recursos Humanos",
+            "Financeiro",
+            "Marketing",
+            "Vendas"
+        ]
+        self.session = connection()
+        self.fake = faker.Faker()
 
-DEPARTMENTS = [
-    "Tecnologia e Inovação",
-    "Recursos Humanos",
-    "Financeiro",
-    "Marketing",
-    "Vendas"
-]
+    def create_fake_departments(self):
+        DEPARTMENTS = [
+            "Tecnologia e Inovação",
+            "Recursos Humanos",
+            "Financeiro",
+            "Marketing",
+            "Vendas"
+        ]
+        for department in DEPARTMENTS:
+            department = Department(department)
+            self.session.add(department)
+        self.session.commit()
+        self.session.close()
+    def create_fake_employees(self, num_employees=10):
+        for _ in range(num_employees):
+            name = self.fake.name()
+            department = random.choice(self.__DEPARTMENTS)
+            department_id = self.get_department_id_by_name(department)
+            dependents = random.randint(0, 5)
+            employee = {
+                "name": name,
+                "department_id": department_id,
+                "dependents": dependents
+            }
+            employee_entity = Employee(name, department_id, dependents)
+            self.session.add(employee)
+        self.session.commit()
+        self.session.close()
 
-faker = faker.Faker()
-
-
-def create_fake_departments() -> dict:
-    department_service = DepartmentService()
-    for department in DEPARTMENTS:
-        department_service.create_department(department)
-def create_fake_employeer() -> dict:
-    for _ in range(10):
-        name = faker.name()
-        department_id = get_department_id_by_name(random.choice(DEPARTMENTS))
-        dependents = random.randint(0, 5)
-        employee = {
-            "name": name,
-            "department_id": get_department_id_by_name(department_id),
-            "dependents": dependents
-        }
-        populate_db(connection, "tb_employee", employee)
-        
-        
-        
-
-def get_department_id_by_name(name:str) -> str:
-    departament_service=DepartmentService()
-    departament=departament_service.find_ID_by_name(name)
-    return departament.id
-
-
+    def get_department_id_by_name(self, name):
+        department = self.session.query(Department).filter(Department.name == name).first()
+        return department.id
+    
+    
 # python populate_db.py
 if __name__ == "__main__":
-    create_fake_departments()
-    create_fake_employeer()
+    data_service = FakeDataService()
+    data_service.create_fake_departments()
+    data_service.create_fake_employees()

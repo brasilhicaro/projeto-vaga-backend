@@ -9,7 +9,7 @@ class DepartmentRequest(BaseModel):
     name: str
 
 
-class DepartmentResponse(DepartmentRequest):
-
+class DepartmentResponse(BaseModel):
+    name: str
     class Config:
         from_attributes = True

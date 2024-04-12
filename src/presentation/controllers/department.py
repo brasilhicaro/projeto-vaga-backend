@@ -31,6 +31,6 @@ async def create_department(payload: DepartmentRequest) -> DepartmentResponse:
     try:
         department_service = DepartmentService()
         department = department_service.create_department(payload)
-        return DepartmentResponse.model_validate(department)
+        return payload.dict()
     except Exception as e:
         raise HTTPException(status_code=400, detail=e)

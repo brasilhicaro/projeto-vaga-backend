@@ -17,7 +17,7 @@ class DepartmentRepository:
         """
         self.__postgres_connection = Connection()
         
-    def insert_department(self, department: str) -> Department:
+    def insert_department(self, department_name: str) -> Department:
         """
         _summary_: Method responsible for inserting a department into the database
 
@@ -27,16 +27,16 @@ class DepartmentRepository:
         Returns:
             Department: _description_: Department object
         """
-        if department is "":
-            raise ValueError("Department object cannot be None")
 
         session = self.__postgres_connection.get_session()
         
         try:
             with session.begin():
-                session.add(department)
+                new_department:Department = Department(department_name)
+                session.add(new_department)
                 session.flush()
                 session.commit()
+                return new_department
         except SQLAlchemyError as e:
             session.rollback()
             print(f"Error inserting department: {e}")
@@ -44,7 +44,6 @@ class DepartmentRepository:
         finally:
             session.close()
 
-        return department
     def select_department(self, department_id: str) -> Department:
         """_summary_: Method responsible for returning a department from the database
 
@@ -69,7 +68,7 @@ class DepartmentRepository:
 
         return department
 
-    def select_department_by_name(self, department_name: str) -> str:
+    def select_department_id_by_name(self, department_name: str) -> str:
         """
         _summary_: 
             Method responsible for returning a department from the database
@@ -83,6 +82,7 @@ class DepartmentRepository:
         session = self.__postgres_connection.get_session()
         try:
             department = session.query(Department).filter(Department.name == department_name).first()
+            return department.id
         except SQLAlchemyError as e:
             print(f"Error selecting department: {e}")
             raise
@@ -98,7 +98,7 @@ class DepartmentRepository:
         session = self.__postgres_connection.get_session()
 
         try:
-            departments = session.query(Department).all()
+            departments:Department = session.query(Department).all()
         except SQLAlchemyError as e:
             print(f"Error selecting all departments: {e}")
             raise

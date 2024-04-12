@@ -23,10 +23,12 @@ async def get_employees():
 
 
 @router.post("/", response_model=EmployeeResponse, status_code=201)
-async def create_employee(payload: EmployeeRequest) -> EmployeeResponse:
+async def create_employee(employee: EmployeeRequest):
     try:
         employee_service = EmployeeService()
-        employee = employee_service.create_employee(payload)
-        return EmployeeResponse.model_validate(employee)
+        employer_response = employee_service.create_employee(employee)
+        if employer_response == None:
+            raise HTTPException(status_code=400, detail="Invalid employee")
+        return employer_response.dict()
     except Exception as e:
         raise HTTPException(status_code=400, detail=e)

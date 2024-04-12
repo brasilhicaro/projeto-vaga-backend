@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 class EmployeeRequest(BaseModel):
     name: str
-    department_id: str
+    department_name: str
     dependents: int
 
 

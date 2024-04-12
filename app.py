@@ -5,7 +5,7 @@ from src.presentation.controllers import department, employee
 
 def create_application() -> FastAPI:
     application = FastAPI(
-        title="Projeto do Hicaro",
+        title="ACMEVita Rotas",
         summary="Projeto para vaga de backend",
         contact={
             "name": "Hicaro Brasil",
